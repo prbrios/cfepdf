@@ -171,10 +171,15 @@ public class CFEPDFGeradorHtml {
 		sb.append("</tr>");
 		sb.append("<tr>");
 		sb.append("<td colspan=\"2\" class=\"chave 200pt\">");
-		sb.append("<barcode type=\"CODE128_UCC\" value=\"" + chave.substring(0, 22) + "\"/><br/><br/>");
+		sb.append("<barcode type=\"CODE128_UCC\" value=\"" + chave.substring(0, 22) + "\"/>");
+		sb.append("</td>");
+		sb.append("</tr>");		
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"chave 200pt\">");
 		sb.append("<barcode type=\"CODE128_UCC\" value=\"" + chave.substring(22) + "\"/>");
 		sb.append("</td>");
 		sb.append("</tr>");
+		
 		return sb.toString();
 	}
 	

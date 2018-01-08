@@ -48,7 +48,7 @@ public class CFEPDFGeradorPdf {
 
 	public void criarPdf(String codigohtml, String output) throws UnsupportedEncodingException, IOException, DocumentException {
 
-		Rectangle pagesize = new Rectangle(200, 2000);
+		Rectangle pagesize = new Rectangle(200, 1000);
 		Document document = new Document(pagesize, 0, 0, 0, 0);
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(output));
 		document.open();
@@ -94,7 +94,6 @@ public class CFEPDFGeradorPdf {
 	}
 	
 	public Chunk getEanBarcodeChunk(WorkerContext ctx, Map<String, String> attributes) {
-		
 		MapContext mc;
 		try {
 			mc = (MapContext) ctx.get("com.itextpdf.tool.xml.pipeline.end.PdfWriterPipeline");
@@ -120,6 +119,8 @@ public class CFEPDFGeradorPdf {
 			barcode.setCodeType(Barcode.CODE128_UCC);
 			barcode.setFont(null);
 			barcode.setCode(attributes.get("value"));
+			barcode.setBarHeight(25f);
+			//barcode.setX(1.05f);
 			img = barcode.createImageWithBarcode(writer.getDirectContent(), null, null);
 		}
 		return new Chunk(img, 0, 0, true);
