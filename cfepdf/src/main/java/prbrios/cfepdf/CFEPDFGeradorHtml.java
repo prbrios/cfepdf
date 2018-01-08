@@ -212,36 +212,70 @@ public class CFEPDFGeradorHtml {
 	CFEPDFGeradorHtml(CFe cfe, String qrcode){
 		this.qrcode = qrcode;
 		
-		html = new StringBuilder();
-		html.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
-		html.append("<head>");
-		html.append("<title>.</title>");
-		html.append("<meta charset=\"utf-8\"/>");
-		html.append("<style type=\"text/css\">");
-		html.append(this.css());
-		html.append("</style>");
-		html.append("</head>");
-		html.append("<body>");
-		html.append("<table>");
-		html.append(this.cabecalho(cfe));
-		html.append(this.extrato(cfe));
-		html.append(this.consumidor(cfe));
-		html.append(this.itens(cfe));
-		html.append(this.total(cfe));
-		html.append(this.pagamento(cfe));
-		html.append(this.observacoes(cfe));
-		html.append(this.autorizacao(cfe));
-		html.append(this.chave(cfe));
-		html.append(this.qrcode(cfe));
-		html.append("</table>");
-		html.append("</body>");
-		html.append("</html>");
+		this.html = new StringBuilder();
+		this.html.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+		this.html.append("<head>");
+		this.html.append("<title>.</title>");
+		this.html.append("<meta charset=\"utf-8\"/>");
+		this.html.append("<style type=\"text/css\">");
+		this.html.append(this.css());
+		this.html.append("</style>");
+		this.html.append("</head>");
+		this.html.append("<body>");
+		this.html.append("<table>");
+		this.html.append(this.cabecalho(cfe));
+		this.html.append(this.extrato(cfe));
+		this.html.append(this.consumidor(cfe));
+		this.html.append(this.itens(cfe));
+		this.html.append(this.total(cfe));
+		this.html.append(this.pagamento(cfe));
+		this.html.append(this.observacoes(cfe));
+		this.html.append(this.autorizacao(cfe));
+		this.html.append(this.chave(cfe));
+		this.html.append(this.qrcode(cfe));
+		this.html.append("</table>");
+		this.html.append("</body>");
+		this.html.append("</html>");
 	}
 	
 	CFEPDFGeradorHtml(CFeCanc cfeCanc, String qrcode){
 		
 	}
 
+	CFEPDFGeradorHtml(){
+		
+	}
+	
+	/**
+	 * Converte um texto em html
+	 * @param texto
+	 * @return
+	 */
+	public String gerarHtmlDeTexto(String texto, String css) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+		sb.append("<head>");
+		sb.append("<title>.</title>");
+		sb.append("<meta charset=\"utf-8\"/>");
+		sb.append("<style type=\"text/css\">");
+		sb.append("table {width:200pt;}");
+		sb.append(".sss{" + css + "}");
+		sb.append(".200pt{width:200pt;}");
+		sb.append("</style>");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append("<table>");
+		sb.append("<tr>");
+		sb.append("<td class=\"sss 200pt\">");
+		sb.append(texto);
+		sb.append("</td>");
+		sb.append("</tr>");
+		sb.append("</table>");
+		sb.append("</body>");
+		sb.append("</html>");
+		return sb.toString();
+	}
+	
 	@Override
 	public String toString() {
 		return this.html.toString();

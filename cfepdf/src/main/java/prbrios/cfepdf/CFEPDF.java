@@ -1,16 +1,9 @@
 package prbrios.cfepdf;
 
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
-
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.printing.PDFPageable;
 
 import prbrios.cfepdf.esquema.cfe.CFe;
 import prbrios.cfepdf.esquema.cfecanc.CFeCanc;
@@ -37,33 +30,21 @@ public class CFEPDF {
 			if(!new File(diretorioOutput).isDirectory())
 				diretorioOutput = System.getProperty("java.io.tmpdir");
 		
-		Path path = Paths.get(diretorioOutput, prefixo + System.currentTimeMillis() + ".pdf");
+		Path path = Paths.get(diretorioOutput, (prefixo == null ? "" : prefixo) + System.currentTimeMillis() + ".pdf");
 		this.saida = path.toString();
 		return path.toString();
 	}
 	
 	public void gerarPdfAutorizacao() throws CFEPDFException {
-		
-		this.saida = this.defineDiretorioArquivo("AUT", this.saida);
-		
-		CFe cfe = new CFEPDFEsquemas().objetoCFe(this.getXml());
-		String dadosQRCode = String.format("%1$s|%2$s|%3$s|%4$s|%5$s", this.dadosRetorno.getChaveConsulta(), this.dadosRetorno.getDataHoraEmissao(), this.dadosRetorno.getValorTotal(), this.dadosRetorno.getCpfCnpjAdquirente(), this.dadosRetorno.getAssinaturaQRCode());
-		String html = new CFEPDFGeradorHtml(cfe, dadosQRCode).toString();
 		try {
+			this.saida = this.defineDiretorioArquivo("AUT", this.saida);
+			
+			CFe cfe = new CFEPDFEsquemas().objetoCFe(this.getXml());
+			String dadosQRCode = String.format("%1$s|%2$s|%3$s|%4$s|%5$s", this.dadosRetorno.getChaveConsulta(), this.dadosRetorno.getDataHoraEmissao(), this.dadosRetorno.getValorTotal(), this.dadosRetorno.getCpfCnpjAdquirente(), this.dadosRetorno.getAssinaturaQRCode());
+			String html = new CFEPDFGeradorHtml(cfe, dadosQRCode).toString();
 			CFEPDFGeradorPdf g = new CFEPDFGeradorPdf();
 			g.criarPdf(html, this.saida);
-			Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + new File(this.saida));
-			
-			try {
-	    		PDDocument documento = PDDocument.load(new File(this.saida));
-	    		PrintService servico = PrintServiceLookup.lookupDefaultPrintService();
-	    		PrinterJob job = PrinterJob.getPrinterJob();
-	    		job.setPageable(new PDFPageable(documento));
-	    		job.setPrintService(servico);
-	    		job.print();
-	    		documento.close();
-	    	}catch(Exception e) {}
-			
+			//Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + new File(this.saida));
 			
 		}catch(Exception e) {
 			throw new CFEPDFException(e.getMessage());
@@ -73,8 +54,9 @@ public class CFEPDF {
 	public void gerarPdfCancelamento() throws CFEPDFException {
 		CFeCanc cfeCanc = new CFEPDFEsquemas().objetoCFeCanc(this.getXml());
 	}
-
+	
 	public String getSaida() {
 		return saida;
 	}
+	
 }
