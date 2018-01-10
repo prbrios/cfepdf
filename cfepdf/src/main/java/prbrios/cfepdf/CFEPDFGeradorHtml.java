@@ -40,12 +40,24 @@ public class CFEPDFGeradorHtml {
 		return sb.toString();
 	}
 	
+	private String cabecalhoCanc(CFeCanc cfe) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"cabecalho 200pt sep\">");
+		sb.append(cfe.getInfCFe().getEmit().getxNome() + "<br/>");
+		sb.append(cfe.getInfCFe().getEmit().getEnderEmit().getxLgr() + "<br/>");
+		sb.append("CNPJ: " + cfe.getInfCFe().getEmit().getCnpj() + " IE: " + cfe.getInfCFe().getEmit().getIe());
+		sb.append("</td>");
+		sb.append("</tr>");
+		return sb.toString();
+	}
+	
 	private String extrato(CFe cfe) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<tr>");
 		sb.append("<td colspan=\"2\" class=\"extrato 200pt sep\">");
 		sb.append("Extrato N&#176; " + cfe.getInfCFe().getIde().getnCFe() + "<br/>");
-		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - SAT");
+		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - MFE");
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
@@ -238,11 +250,123 @@ public class CFEPDFGeradorHtml {
 		this.html.append("</html>");
 	}
 	
-	CFEPDFGeradorHtml(CFeCanc cfeCanc, String qrcode){
+	public CFEPDFGeradorHtml(CFeCanc cfeCanc, String qrcode){
+		
+		this.qrcode = qrcode;
+		
+		this.html = new StringBuilder();
+		this.html.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+		this.html.append("<head>");
+		this.html.append("<title>.</title>");
+		this.html.append("<meta charset=\"utf-8\"/>");
+		this.html.append("<style type=\"text/css\">");
+		this.html.append(this.css());
+		this.html.append("</style>");
+		this.html.append("</head>");
+		this.html.append("<body>");
+		this.html.append("<table>");
+		this.html.append(this.cabecalhoCanc(cfeCanc));
+		this.html.append(this.extratoCanc(cfeCanc));
+		this.html.append(this.consumidorCanc(cfeCanc));
+		this.html.append(this.totalCanc(cfeCanc));
+		this.html.append(this.autorizacaoCanc(cfeCanc));
+		this.html.append(this.chaveCanc(cfeCanc));
+		this.html.append(this.qrcodeCanc(cfeCanc));
+		this.html.append("</table>");
+		this.html.append("</body>");
+		this.html.append("</html>");
 		
 	}
 
-	CFEPDFGeradorHtml(){
+	private Object qrcodeCanc(CFeCanc cfeCanc) {
+		StringBuilder sb = new StringBuilder();
+		if(this.qrcode != null) {
+			sb.append("<tr>");
+			sb.append("<td colspan=\"2\" align=\"center\" class=\"200pt\">");
+			sb.append("<qrcode value=\"" + this.qrcode + "\"/>");
+			sb.append("</td>");
+			sb.append("</tr>");
+		}
+		return sb.toString();
+	}
+
+	private Object chaveCanc(CFeCanc cfeCanc) {
+		String chave = cfeCanc.getInfCFe().getId().substring(3);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"chave 200pt\">");
+		sb.append(chave);
+		sb.append("</td>");
+		sb.append("</tr>");
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"chave 200pt\">");
+		sb.append("<barcode type=\"CODE128_UCC\" value=\"" + chave.substring(0, 22) + "\"/>");
+		sb.append("</td>");
+		sb.append("</tr>");		
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"chave 200pt\">");
+		sb.append("<barcode type=\"CODE128_UCC\" value=\"" + chave.substring(22) + "\"/>");
+		sb.append("</td>");
+		sb.append("</tr>");
+		
+		return sb.toString();
+	}
+
+	private Object autorizacaoCanc(CFeCanc cfeCanc) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"extrato 200pt\">");
+		sb.append("SAT N&#176; " + cfeCanc.getInfCFe().getIde().getNserieSAT() + "<br/>");
+		sb.append(this.formataData(cfeCanc.getInfCFe().getIde().getdEmi()) + " " + this.formataHora(cfeCanc.getInfCFe().getIde().gethEmi()));
+		sb.append("</td>");
+		sb.append("</tr>");
+		return sb.toString();
+	}
+
+	private Object totalCanc(CFeCanc cfeCanc) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td class=\"total 100pt\">");
+		sb.append("VALOR TOTAL R&#36;");
+		sb.append("</td>");
+		sb.append("<td class=\"total direita 100pt\">");
+		sb.append(cfeCanc.getInfCFe().getTotal().getvCFe().replace(".", ","));
+		sb.append("</td>");
+		sb.append("</tr>");
+		return sb.toString();
+	}
+
+	private Object consumidorCanc(CFeCanc cfeCanc) {
+		String dadosConsumidor = "N&atilde;o informado";
+		if(cfeCanc.getInfCFe().getDest() != null) {
+			if(cfeCanc.getInfCFe().getDest().getCpf() != null)
+				dadosConsumidor = cfeCanc.getInfCFe().getDest().getCpf();
+			else if(cfeCanc.getInfCFe().getDest().getCnpj() != null)
+				dadosConsumidor = cfeCanc.getInfCFe().getDest().getCnpj();
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"200pt sep\">");
+		sb.append("CPF/CNPJ do CONSUMIDOR: " + dadosConsumidor);
+		sb.append("</td>");
+		sb.append("</tr>");
+		return sb.toString();
+	}
+
+	private Object extratoCanc(CFeCanc cfeCanc) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td colspan=\"2\" class=\"extrato 200pt sep\">");
+		sb.append("Extrato N&#176; " + cfeCanc.getInfCFe().getIde().getnCFe() + "<br/>");
+		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - MFE<br/>");
+		sb.append("CANCELAMENTO");
+		sb.append("</td>");
+		sb.append("</tr>");
+		return sb.toString();
+	}
+
+	public CFEPDFGeradorHtml(){
 		
 	}
 	
