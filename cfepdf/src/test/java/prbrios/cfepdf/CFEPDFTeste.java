@@ -13,10 +13,10 @@ public class CFEPDFTeste {
 			String arquivo = cfepdf.getSaida();
 			imp.imprimir(arquivo);
 			
-			imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);
-			imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);			
-			imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);			
-			imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);
+			//imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);
+			//imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);			
+			//imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);			
+			//imp.imprimirAvulso("All the jars listed above are available under the AGPL license. Additional iText 7 functionality is available through add-ons<br/>", null);
 			
 			
 			
