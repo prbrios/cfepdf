@@ -155,8 +155,12 @@ public class CFEPDFGeradorHtml {
 		sb.append("<tr>");
 		sb.append("<td colspan=\"2\" class=\"sep sep-top 200pt\">");
 		sb.append("OBSERVA&Ccedil;&Ocirc;ES DO CONTRIBUINTE<br/>");
-		sb.append("Valor aproximado dos tributos conforme Lei Federal 12.741/2012 R&#36; " + cfe.getInfCFe().getTotal().getvCFeLei12741().replace(".", ",") + "<br/>");
-		sb.append(cfe.getInfCFe().getInfAdic().getInfCpl());
+		if(cfe.getInfCFe().getTotal().getvCFeLei12741() != null) {
+			sb.append("Valor aproximado dos tributos conforme Lei Federal 12.741/2012 R&#36; " + cfe.getInfCFe().getTotal().getvCFeLei12741().replace(".", ",") + "<br/>");
+		}
+		if(cfe.getInfCFe().getInfAdic().getInfCpl() != null) {
+			sb.append(cfe.getInfCFe().getInfAdic().getInfCpl());
+		}
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
@@ -383,14 +387,14 @@ public class CFEPDFGeradorHtml {
 		sb.append("<meta charset=\"utf-8\"/>");
 		sb.append("<style type=\"text/css\">");
 		sb.append("table {width:200pt;}");
-		sb.append(".sss{" + css + "}");
+		sb.append(css);
 		sb.append(".200pt{width:200pt;}");
 		sb.append("</style>");
 		sb.append("</head>");
 		sb.append("<body>");
 		sb.append("<table>");
 		sb.append("<tr>");
-		sb.append("<td class=\"sss 200pt\">");
+		sb.append("<td class=\"200pt\">");
 		sb.append(texto);
 		sb.append("</td>");
 		sb.append("</tr>");

@@ -12,10 +12,20 @@ public class CFEPDF {
 
 	private String saida;
 	private CFEPDFRetornoEnvioDadosVenda dadosRetorno;
+	private String retornoSAT; 
+	
+	public CFEPDF() throws CFEPDFException {
+	}
 	
 	CFEPDF(String retornoSAT, String saida) throws CFEPDFException{
 		this.saida = saida;
-		this.dadosRetorno = new CFEPDFRetornoEnvioDadosVenda(retornoSAT);
+		this.retornoSAT = retornoSAT;
+	}
+	
+	private void geraObjetoDadosRetorno() throws CFEPDFException {
+		if(this.retornoSAT == null)
+			throw new CFEPDFException("Dados de retorno do SAT não informado.");
+		this.dadosRetorno = new CFEPDFRetornoEnvioDadosVenda(this.retornoSAT);		
 	}
 	
 	private String getXml() {
@@ -41,6 +51,7 @@ public class CFEPDF {
 	
 	public void gerarPdfAutorizacao() throws CFEPDFException {
 		try {
+			this.geraObjetoDadosRetorno();
 			this.saida = this.defineDiretorioArquivo("AUT", this.saida);
 			
 			CFe cfe = new CFEPDFEsquemas().objetoCFe(this.getXml());
@@ -55,6 +66,7 @@ public class CFEPDF {
 	
 	public void gerarPdfCancelamento() throws CFEPDFException {
 		try {
+			this.geraObjetoDadosRetorno();
 			this.saida = this.defineDiretorioArquivo("AUT", this.saida);
 			CFeCanc cfeCanc = new CFEPDFEsquemas().objetoCFeCanc(this.getXml());
 			String html = new CFEPDFGeradorHtml(cfeCanc, this.dadosQRCode()).toString();
@@ -64,9 +76,21 @@ public class CFEPDF {
 			throw new CFEPDFException(e.getMessage());
 		}
 	}
-	
+
 	public String getSaida() {
 		return saida;
 	}
-	
+
+	public void setSaida(String saida) {
+		this.saida = saida;
+	}
+
+	public String getRetornoSAT() {
+		return retornoSAT;
+	}
+
+	public void setRetornoSAT(String retornoSAT) {
+		this.retornoSAT = retornoSAT;
+	}
+
 }
