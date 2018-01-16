@@ -37,7 +37,7 @@ public class CFEPDFGeradorHtml {
 		sb.append("<td colspan=\"2\" class=\"cabecalho 200pt sep\">");
 		sb.append(cfe.getInfCFe().getEmit().getxNome() + "<br/>");
 		sb.append(cfe.getInfCFe().getEmit().getEnderEmit().getxLgr() + "<br/>");
-		sb.append("CNPJ: " + cfe.getInfCFe().getEmit().getCnpj() + " IE: " + cfe.getInfCFe().getEmit().getIe());
+		sb.append("CNPJ: " + this.formataCNPJouCPF(cfe.getInfCFe().getEmit().getCnpj()) + " IE: " + cfe.getInfCFe().getEmit().getIe());
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
