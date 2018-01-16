@@ -1,7 +1,9 @@
 package prbrios.cfepdf;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 import prbrios.cfepdf.esquema.cfe.CFe;
 import prbrios.cfepdf.esquema.cfe.Det;
@@ -99,11 +101,11 @@ public class CFEPDFGeradorHtml {
 			String nItem = String.format("%-4s", String.format("%03d", Integer.parseInt(det.getnItem().toString())));
         	String xProd = String.format("%-100s", det.getProd().getxProd()).substring(0,40).trim();
         	String cProd = String.format("%-100s", det.getProd().getcProd()).substring(0,11);
-        	String qCom = det.getProd().getqCom().replace(".", ",");
+        	String qCom = this.formataNumero(det.getProd().getqCom());
         	String uCom = det.getProd().getuCom();
-        	String vUnCom = det.getProd().getvUnCom().replace(".", ",");
-        	String vItem12741 = det.getImposto().getvItem12741() == null ? "0,00" : det.getImposto().getvItem12741().replace(".", ",");
-        	String vProd = det.getProd().getvProd().replace(".", ",");
+        	String vUnCom = this.formataNumero(det.getProd().getvUnCom());
+        	String vItem12741 = det.getImposto().getvItem12741() == null ? "0,00" : this.formataNumero(det.getImposto().getvItem12741());
+        	String vProd = this.formataNumero(det.getProd().getvProd());
         	
         	sb.append(String.format("%1$s %2$s %3$s", nItem, cProd, xProd) + "<br/>");
         	sb.append(String.format("%1$s %2$s &times; %3$s (%4$s) %5$s", qCom, uCom, vUnCom, vItem12741, vProd));
@@ -122,12 +124,24 @@ public class CFEPDFGeradorHtml {
 		sb.append("VALOR TOTAL R&#36;");
 		sb.append("</td>");
 		sb.append("<td class=\"total direita 100pt\">");
-		sb.append(cfe.getInfCFe().getTotal().getvCFe().replace(".", ","));
+		sb.append(this.formataNumero(cfe.getInfCFe().getTotal().getvCFe()));
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
 	}
-
+	
+	public static void main(String[] args) {
+		
+		
+		
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		System.out.println(nf.format(1.98999999));
+		
+		/*NumberFormat nf = new DecimalFormat("#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR")));
+		double valor = 78945;
+		System.out.println (nf.format (valor / 100));*/
+	}
+	
 	private String desconto(CFe cfe) {
 		
 		//NumberFormat nf = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR")));
@@ -146,7 +160,7 @@ public class CFEPDFGeradorHtml {
 				sb.append("Total bruto R&#36;");
 				sb.append("</td>");
 				sb.append("<td class=\"direita 100pt\">");
-				sb.append(totVprod.toString().replace(".", ","));
+				sb.append(this.formataNumero(totVprod.toString()));
 				sb.append("</td>");
 				sb.append("</tr>");
 			}
@@ -156,7 +170,7 @@ public class CFEPDFGeradorHtml {
 				sb.append("Total desconto R&#36;");
 				sb.append("</td>");
 				sb.append("<td class=\"direita 100pt\">");
-				sb.append(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc().replace(".", ","));
+				sb.append(this.formataNumero(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc()));
 				sb.append("</td>");
 				sb.append("</tr>");
 			}
@@ -182,7 +196,7 @@ public class CFEPDFGeradorHtml {
 			sb.append(meioPagamento);
 			sb.append("</td>");
 			sb.append("<td class=\"direita\">");
-			sb.append(mp.getvMP().replace(".", ","));
+			sb.append(this.formataNumero(mp.getvMP()));
 			sb.append("</td>");
 			sb.append("</tr>");
 		}
@@ -195,7 +209,7 @@ public class CFEPDFGeradorHtml {
 		sb.append("<td colspan=\"2\" class=\"sep sep-top 200pt\">");
 		sb.append("OBSERVA&Ccedil;&Ocirc;ES DO CONTRIBUINTE<br/>");
 		if(cfe.getInfCFe().getTotal().getvCFeLei12741() != null) {
-			sb.append("Valor aproximado dos tributos conforme Lei Federal 12.741/2012 R&#36; " + cfe.getInfCFe().getTotal().getvCFeLei12741().replace(".", ",") + "<br/>");
+			sb.append("Valor aproximado dos tributos conforme Lei Federal 12.741/2012 R&#36; " + this.formataNumero(cfe.getInfCFe().getTotal().getvCFeLei12741()) + "<br/>");
 		}
 		if(cfe.getInfCFe().getInfAdic() != null) {
 			sb.append(cfe.getInfCFe().getInfAdic().getInfCpl());
@@ -374,7 +388,7 @@ public class CFEPDFGeradorHtml {
 		sb.append("VALOR TOTAL R&#36;");
 		sb.append("</td>");
 		sb.append("<td class=\"total direita 100pt\">");
-		sb.append(cfeCanc.getInfCFe().getTotal().getvCFe().replace(".", ","));
+		sb.append(this.formataNumero(cfeCanc.getInfCFe().getTotal().getvCFe()));
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
@@ -457,6 +471,14 @@ public class CFEPDFGeradorHtml {
 		}
 		
 		return arg;
+	}
+	
+	private String formataNumero(String valor) {
+		DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+		DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+		symbols.setCurrencySymbol("");
+		formatter.setDecimalFormatSymbols(symbols);
+		return formatter.format(Double.parseDouble(valor));
 	}
 
 }
