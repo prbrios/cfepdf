@@ -15,8 +15,15 @@ public class Total {
 	@XmlElement(name = "vCFe")
 	private String vCFe;
 
+	@XmlElement(name = "ICMSTot")
+	private ICMSTot icmsTot;
+	
 	public String getvCFeLei12741() {
 		return vCFeLei12741;
+	}
+
+	public ICMSTot getIcmsTot() {
+		return icmsTot;
 	}
 
 	public void setvCFeLei12741(String vCFeLei12741) {

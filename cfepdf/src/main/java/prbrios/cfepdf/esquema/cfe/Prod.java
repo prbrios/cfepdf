@@ -39,6 +39,9 @@ public class Prod {
 	@XmlElement(name="vProd")
 	private String vProd;
 	
+	@XmlElement(name="vDesc")
+	private String vDesc;
+	
 	public String getcProd() {
 		return cProd;
 	}
@@ -113,6 +116,10 @@ public class Prod {
 
 	public String getvProd() {
 		return vProd;
+	}
+
+	public String getvDesc() {
+		return vDesc;
 	}
 	
 }

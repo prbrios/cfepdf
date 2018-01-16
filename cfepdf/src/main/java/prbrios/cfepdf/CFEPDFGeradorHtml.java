@@ -1,5 +1,8 @@
 package prbrios.cfepdf;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import prbrios.cfepdf.esquema.cfe.CFe;
 import prbrios.cfepdf.esquema.cfe.Det;
 import prbrios.cfepdf.esquema.cfe.MP;
@@ -99,7 +102,7 @@ public class CFEPDFGeradorHtml {
         	String qCom = det.getProd().getqCom().replace(".", ",");
         	String uCom = det.getProd().getuCom();
         	String vUnCom = det.getProd().getvUnCom().replace(".", ",");
-        	String vItem12741 = det.getImposto().getvItem12741() == null ? "(0,00)" : det.getImposto().getvItem12741().replace(".", ",");
+        	String vItem12741 = det.getImposto().getvItem12741() == null ? "0,00" : det.getImposto().getvItem12741().replace(".", ",");
         	String vProd = det.getProd().getvProd().replace(".", ",");
         	
         	sb.append(String.format("%1$s %2$s %3$s", nItem, cProd, xProd) + "<br/>");
@@ -124,7 +127,43 @@ public class CFEPDFGeradorHtml {
 		sb.append("</tr>");
 		return sb.toString();
 	}
-	
+
+	private String desconto(CFe cfe) {
+		
+		//NumberFormat nf = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR")));
+		//double valor = 78945;
+		//System.out.println (nf.format (valor / 100));
+		
+		StringBuilder sb = new StringBuilder();
+		if(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc()!=null) {
+			Double totVprod = 0.00;
+			for(Det det : cfe.getInfCFe().getDet()) {
+				totVprod += Double.parseDouble(det.getProd().getvProd());
+			}
+			if(totVprod > 0) {
+				sb.append("<tr>");
+				sb.append("<td class=\"100pt\">");
+				sb.append("Total bruto R&#36;");
+				sb.append("</td>");
+				sb.append("<td class=\"direita 100pt\">");
+				sb.append(totVprod.toString().replace(".", ","));
+				sb.append("</td>");
+				sb.append("</tr>");
+			}
+			if(!cfe.getInfCFe().getTotal().getIcmsTot().getvDesc().equals("0.00")) {
+				sb.append("<tr>");
+				sb.append("<td class=\"100pt\">");
+				sb.append("Total desconto R&#36;");
+				sb.append("</td>");
+				sb.append("<td class=\"direita 100pt\">");
+				sb.append(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc().replace(".", ","));
+				sb.append("</td>");
+				sb.append("</tr>");
+			}
+		}
+		return sb.toString();
+	}
+
 	private String pagamento(CFe cfe) {
 		StringBuilder sb = new StringBuilder();
 		for(MP mp : cfe.getInfCFe().getPgto().getMp()) {
@@ -158,7 +197,7 @@ public class CFEPDFGeradorHtml {
 		if(cfe.getInfCFe().getTotal().getvCFeLei12741() != null) {
 			sb.append("Valor aproximado dos tributos conforme Lei Federal 12.741/2012 R&#36; " + cfe.getInfCFe().getTotal().getvCFeLei12741().replace(".", ",") + "<br/>");
 		}
-		if(cfe.getInfCFe().getInfAdic().getInfCpl() != null) {
+		if(cfe.getInfCFe().getInfAdic() != null) {
 			sb.append(cfe.getInfCFe().getInfAdic().getInfCpl());
 		}
 		sb.append("</td>");
@@ -243,6 +282,7 @@ public class CFEPDFGeradorHtml {
 		this.html.append(this.extrato(cfe));
 		this.html.append(this.consumidor(cfe));
 		this.html.append(this.itens(cfe));
+		this.html.append(this.desconto(cfe));
 		this.html.append(this.total(cfe));
 		this.html.append(this.pagamento(cfe));
 		this.html.append(this.observacoes(cfe));
@@ -253,7 +293,7 @@ public class CFEPDFGeradorHtml {
 		this.html.append("</body>");
 		this.html.append("</html>");
 	}
-	
+
 	public CFEPDFGeradorHtml(CFeCanc cfeCanc, String qrcode){
 		
 		this.qrcode = qrcode;
@@ -409,4 +449,11 @@ public class CFEPDFGeradorHtml {
 		return this.html.toString();
 	}
 	
+	private String formataCNPJouCPF(String arg) {
+		if(arg.length() == 11) {
+			
+		}
+		
+		return null;
+	}
 }
