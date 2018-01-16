@@ -49,7 +49,7 @@ public class CFEPDFGeradorHtml {
 		sb.append("<td colspan=\"2\" class=\"cabecalho 200pt sep\">");
 		sb.append(cfe.getInfCFe().getEmit().getxNome() + "<br/>");
 		sb.append(cfe.getInfCFe().getEmit().getEnderEmit().getxLgr() + "<br/>");
-		sb.append("CNPJ: " + cfe.getInfCFe().getEmit().getCnpj() + " IE: " + cfe.getInfCFe().getEmit().getIe());
+		sb.append("CNPJ: " + this.formataCNPJouCPF(cfe.getInfCFe().getEmit().getCnpj()) + " IE: " + cfe.getInfCFe().getEmit().getIe());
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
@@ -71,9 +71,9 @@ public class CFEPDFGeradorHtml {
 		String dadosConsumidor = "N&atilde;o informado";
 		if(cfe.getInfCFe().getDest() != null) {
 			if(cfe.getInfCFe().getDest().getCpf() != null)
-				dadosConsumidor = cfe.getInfCFe().getDest().getCpf();
+				dadosConsumidor = this.formataCNPJouCPF(cfe.getInfCFe().getDest().getCpf());
 			else if(cfe.getInfCFe().getDest().getCnpj() != null)
-				dadosConsumidor = cfe.getInfCFe().getDest().getCnpj();
+				dadosConsumidor = this.formataCNPJouCPF(cfe.getInfCFe().getDest().getCnpj());
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -451,9 +451,12 @@ public class CFEPDFGeradorHtml {
 	
 	private String formataCNPJouCPF(String arg) {
 		if(arg.length() == 11) {
-			
+			return arg.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+		}else if(arg.length() == 14) {
+			return arg.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
 		}
 		
-		return null;
+		return arg;
 	}
+
 }
