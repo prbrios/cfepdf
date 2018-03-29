@@ -30,6 +30,7 @@ public class CFEPDFGeradorHtml {
 		sb.append(".direita{text-align:right}");
 		sb.append(".100pt{width:100pt;}");
 		sb.append(".200pt{width:200pt;}");
+		sb.append(".50pt{width:50pt;}");
 		return sb.toString();
 	}
 	
@@ -209,13 +210,16 @@ public class CFEPDFGeradorHtml {
 		sb.append("<td colspan=\"2\" class=\"sep sep-top 200pt\">");
 		sb.append("OBSERVA&Ccedil;&Ocirc;ES DO CONTRIBUINTE<br/>");
 		if(cfe.getInfCFe().getTotal().getvCFeLei12741() != null) {
-			sb.append("Valor aproximado dos tributos conforme Lei Federal 12.741/2012 R&#36; " + this.formataNumero(cfe.getInfCFe().getTotal().getvCFeLei12741()) + "<br/>");
+			sb.append("<br/>");
+			sb.append(String.format("Valor aproximado dos tributos deste cupom R&#36; %s (conforme Lei Federal 12.741/2012)<br/>", this.formataNumero(cfe.getInfCFe().getTotal().getvCFeLei12741())));
 		}
 		if(cfe.getInfCFe().getInfAdic() != null) {
-			sb.append(cfe.getInfCFe().getInfAdic().getInfCpl());
+			if(cfe.getInfCFe().getInfAdic().getInfCpl() != null && !cfe.getInfCFe().getInfAdic().getInfCpl().equals(""))
+				sb.append(cfe.getInfCFe().getInfAdic().getInfCpl());
 		}
 		sb.append("</td>");
 		sb.append("</tr>");
+		
 		return sb.toString();
 	}
 	
