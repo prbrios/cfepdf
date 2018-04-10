@@ -31,6 +31,8 @@ public class CFEPDFGeradorHtml {
 		sb.append(".100pt{width:100pt;}");
 		sb.append(".200pt{width:200pt;}");
 		sb.append(".50pt{width:50pt;}");
+		sb.append(".50pt{width:170pt;}");
+		sb.append(".50pt{width:30pt;}");
 		return sb.toString();
 	}
 	
@@ -99,9 +101,9 @@ public class CFEPDFGeradorHtml {
 		
 		for(Det det : cfe.getInfCFe().getDet()) {
 			
-			String nItem = String.format("%-4s", String.format("%03d", Integer.parseInt(det.getnItem().toString())));
-        	String xProd = String.format("%-100s", det.getProd().getxProd()).substring(0,40).trim();
-        	String cProd = String.format("%-100s", det.getProd().getcProd()).substring(0,11);
+			String nItem = String.format("%-4s", String.format("%03d", Integer.parseInt(det.getnItem().toString()))).replace(" ", "&nbsp;");;
+        	String xProd = det.getProd().getxProd();
+        	String cProd = det.getProd().getcProd();
         	String qCom = this.formataNumero(det.getProd().getqCom());
         	String uCom = det.getProd().getuCom();
         	String vUnCom = this.formataNumero(det.getProd().getvUnCom());
@@ -109,8 +111,18 @@ public class CFEPDFGeradorHtml {
         	String vProd = this.formataNumero(det.getProd().getvProd());
         	
         	sb.append(String.format("%1$s %2$s %3$s", nItem, cProd, xProd) + "<br/>");
-        	sb.append(String.format("%1$s %2$s &times; %3$s (%4$s) %5$s", qCom, uCom, vUnCom, vItem12741, vProd));
+        	sb.append(String.format("%s %s &times; %s (%s) %s", qCom, uCom, vUnCom, vItem12741, vProd));
         	sb.append("<br/>");
+        	
+        	if(det.getProd().getvDesc() != null) {
+        		sb.append(String.format("desconto sobre item%s", String.format("%1$24s", this.formataNumero(det.getProd().getvDesc())) ));
+        		sb.append("<br/>");
+        	}
+        	
+        	if(det.getProd().getvRatDesc() != null) {
+        		sb.append(String.format("rateio de desconto sobre subtotal%s", String.format("%1$10s", this.formataNumero(det.getProd().getvRatDesc())).replace(" ", "&nbsp;") ));
+        		sb.append("<br/>");
+        	}
 		}
 		
 		sb.append("</td>");
@@ -133,6 +145,8 @@ public class CFEPDFGeradorHtml {
 	
 	public static void main(String[] args) {
 		
+		System.out.println( String.format("%1$20s", "paulo") );
+		System.out.println(String.format("rateio de desconto sobre subtotal%s", String.format("%1$10s", "10.00") ));
 		
 		
 		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -157,23 +171,35 @@ public class CFEPDFGeradorHtml {
 			}
 			if(totVprod > 0) {
 				sb.append("<tr>");
-				sb.append("<td class=\"100pt\">");
+				sb.append("<td class=\"170pt\">");
 				sb.append("Total bruto R&#36;");
 				sb.append("</td>");
-				sb.append("<td class=\"direita 100pt\">");
+				sb.append("<td class=\"direita 300pt\">");
 				sb.append(this.formataNumero(totVprod.toString()));
 				sb.append("</td>");
 				sb.append("</tr>");
 			}
 			if(!cfe.getInfCFe().getTotal().getIcmsTot().getvDesc().equals("0.00")) {
 				sb.append("<tr>");
-				sb.append("<td class=\"100pt\">");
-				sb.append("Total desconto R&#36;");
+				sb.append("<td class=\"170pt\">");
+				sb.append("Desconto/acrescimo sobre item R&#36;");
 				sb.append("</td>");
-				sb.append("<td class=\"direita 100pt\">");
+				sb.append("<td class=\"direita 30pt\">");
 				sb.append(this.formataNumero(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc()));
 				sb.append("</td>");
 				sb.append("</tr>");
+			}
+			if(cfe.getInfCFe().getTotal().getDescAcrEntr() != null) {
+				if(cfe.getInfCFe().getTotal().getDescAcrEntr().getvDescSubtot() != null){
+				sb.append("<tr>");
+				sb.append("<td class=\"170pt\">");
+				sb.append("Desconto sobre subtotal R&#36;");
+				sb.append("</td>");
+				sb.append("<td class=\"direita 30pt\">");
+				sb.append(this.formataNumero(cfe.getInfCFe().getTotal().getDescAcrEntr().getvDescSubtot()));
+				sb.append("</td>");
+				sb.append("</tr>");
+				}
 			}
 		}
 		return sb.toString();

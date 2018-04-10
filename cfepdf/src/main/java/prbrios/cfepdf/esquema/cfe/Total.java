@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Total {
 
+	@XmlElement(name="DescAcrEntr")
+	private DescAcrEntr descAcrEntr;
+	
 	@XmlElement(name = "vCFeLei12741")
 	private String vCFeLei12741;
 
@@ -32,6 +35,10 @@ public class Total {
 
 	public String getvCFe() {
 		return vCFe;
+	}
+
+	public DescAcrEntr getDescAcrEntr() {
+		return descAcrEntr;
 	}
 
 }
