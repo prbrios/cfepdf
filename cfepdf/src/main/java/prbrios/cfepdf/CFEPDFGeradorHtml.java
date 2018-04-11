@@ -114,12 +114,12 @@ public class CFEPDFGeradorHtml {
         	sb.append(String.format("%s %s &times; %s (%s) %s", qCom, uCom, vUnCom, vItem12741, vProd));
         	sb.append("<br/>");
         	
-        	if(det.getProd().getvDesc() != null) {
+        	if(det.getProd().getvDesc() != null && Double.parseDouble(det.getProd().getvDesc()) > 0) {
         		sb.append(String.format("desconto sobre item%s", String.format("%1$24s", this.formataNumero(det.getProd().getvDesc())) ));
         		sb.append("<br/>");
         	}
         	
-        	if(det.getProd().getvRatDesc() != null) {
+        	if(det.getProd().getvRatDesc() != null && Double.parseDouble(det.getProd().getvRatDesc()) > 0) {
         		sb.append(String.format("rateio de desconto sobre subtotal%s", String.format("%1$10s", this.formataNumero(det.getProd().getvRatDesc())).replace(" ", "&nbsp;") ));
         		sb.append("<br/>");
         	}
