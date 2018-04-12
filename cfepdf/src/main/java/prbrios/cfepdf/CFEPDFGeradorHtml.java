@@ -179,7 +179,8 @@ public class CFEPDFGeradorHtml {
 				sb.append("</td>");
 				sb.append("</tr>");
 			}
-			if(!cfe.getInfCFe().getTotal().getIcmsTot().getvDesc().equals("0.00")) {
+			if(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc() != null 
+					&& Double.parseDouble(cfe.getInfCFe().getTotal().getIcmsTot().getvDesc()) > 0) {
 				sb.append("<tr>");
 				sb.append("<td class=\"170pt\">");
 				sb.append("Desconto/acrescimo sobre item R&#36;");
@@ -190,7 +191,8 @@ public class CFEPDFGeradorHtml {
 				sb.append("</tr>");
 			}
 			if(cfe.getInfCFe().getTotal().getDescAcrEntr() != null) {
-				if(cfe.getInfCFe().getTotal().getDescAcrEntr().getvDescSubtot() != null){
+				if(cfe.getInfCFe().getTotal().getDescAcrEntr().getvDescSubtot() != null 
+						&& Double.parseDouble(cfe.getInfCFe().getTotal().getDescAcrEntr().getvDescSubtot()) > 0){
 				sb.append("<tr>");
 				sb.append("<td class=\"170pt\">");
 				sb.append("Desconto sobre subtotal R&#36;");
