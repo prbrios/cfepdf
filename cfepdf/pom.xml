@@ -3,7 +3,27 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>prbrios</groupId>
 	<artifactId>cfepdf</artifactId>
-	<version>1.0.8</version>
+	<version>1.0.9</version>
+	
+	<!-- INICIO CONFIGURACAO DE DEPLOY PARA REPOSITORIO REMOTO -->
+	<repositories>
+		<repository>
+			<id>internal</id>
+			<url>http://201.38.172.82:8888/repository/internal/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>internal</id>
+			<name>Repositorio Interno de Releases</name>
+			<url>http://201.38.172.82:8888/repository/internal/</url>
+		</repository>
+	</distributionManagement>
+	<!-- FIM CONFIGURACAO DE DEPLOY PARA REPOSITORIO REMOTO -->
 	
 	<properties>
 		<itext-versiona>5.5.12</itext-versiona>

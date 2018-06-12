@@ -15,6 +15,9 @@ public class Pgto {
 	@XmlElement(name="MP")
 	private List<MP> mp = new ArrayList<MP>();
 
+	@XmlElement(name="vTroco")
+	private String vTroco;
+	
 	public List<MP> getMp() {
 		return mp;
 	}
@@ -23,4 +26,12 @@ public class Pgto {
 		this.mp = mp;
 	}
 	
+	public String getvTroco() {
+		return vTroco;
+	}
+
+	public void setvTroco(String vTroco) {
+		this.vTroco = vTroco;
+	}
+
 }

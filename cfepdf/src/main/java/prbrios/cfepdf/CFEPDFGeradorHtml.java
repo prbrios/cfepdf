@@ -229,6 +229,17 @@ public class CFEPDFGeradorHtml {
 			sb.append("</td>");
 			sb.append("</tr>");
 		}
+		
+		if(cfe.getInfCFe().getPgto().getvTroco() != null && !cfe.getInfCFe().getPgto().getvTroco().equals("0.00")) {
+			
+			sb.append("<tr>");
+			sb.append("<td>Troco</td>");
+			sb.append("<td class=\"direita\">");
+			sb.append(this.formataNumero(cfe.getInfCFe().getPgto().getvTroco()));
+			sb.append("</td>");
+			sb.append("</tr>");
+		}
+		
 		return sb.toString();
 	}
 	
