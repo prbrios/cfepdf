@@ -39,6 +39,16 @@ public class CFEPDFImpressao {
 		}
 	}
 	
+	private PrintService getImpressora(String nomeImpressora) {
+		PrintService ser = PrintServiceLookup.lookupDefaultPrintService();
+		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+		for(PrintService printer : printServices) {
+			if(printer.getName().equals(nomeImpressora))
+				ser = printer;
+		}
+		return ser;
+	}
+	
 	public void imprimirAvulso(String texto, String css) throws CFEPDFException {
 		try {
 			Path path = Paths.get(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".pdf");
@@ -46,6 +56,36 @@ public class CFEPDFImpressao {
 			CFEPDFGeradorPdf pdf = new CFEPDFGeradorPdf();
 			pdf.criarPdf(html, path.toString());
 			this.imprimir(path.toString());
+		}catch(Exception e) {
+			throw new CFEPDFException(e.getMessage());
+		}
+	}
+	
+	public void imprimir(String arquivo, String nomeImpressora) throws CFEPDFException {
+		
+		if(!this.isPdf(arquivo))
+			throw new CFEPDFException("Formato do arquivo \u00e9 inválido.");
+		
+		try {
+    		PDDocument documento = PDDocument.load(new File(arquivo));
+    		PrintService servico = this.getImpressora(nomeImpressora);
+    		PrinterJob job = PrinterJob.getPrinterJob();
+    		job.setPageable(new PDFPageable(documento));
+    		job.setPrintService(servico);
+    		job.print();
+    		documento.close();
+    	}catch(Exception e) {
+    		throw new CFEPDFException("Ocorreu um erro ao relizar a impress\u00e3o. " + e.getMessage());
+    	}
+	}
+	
+	public void imprimirAvulso(String texto, String css, String nomeImpressora) throws CFEPDFException {
+		try {
+			Path path = Paths.get(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".pdf");
+			String html = new CFEPDFGeradorHtml().gerarHtmlDeTexto(texto, css);
+			CFEPDFGeradorPdf pdf = new CFEPDFGeradorPdf();
+			pdf.criarPdf(html, path.toString());
+			this.imprimir(path.toString(), nomeImpressora);
 		}catch(Exception e) {
 			throw new CFEPDFException(e.getMessage());
 		}
