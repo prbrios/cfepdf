@@ -5,61 +5,57 @@
 	<artifactId>cfepdf</artifactId>
 	<version>1.1.0</version>
 	
-	<!-- INICIO CONFIGURACAO DE DEPLOY PARA REPOSITORIO REMOTO -->
-	<repositories>
-		<repository>
-			<id>internal</id>
-			<url>http://201.38.172.82:8888/repository/internal/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
-
 	<distributionManagement>
+		<snapshotRepository>
+			<id>mavenunigex-bucket-snapshot</id>
+			<url>gs://mavenunigex/snapshot</url>
+		</snapshotRepository>
 		<repository>
-			<id>internal</id>
-			<name>Repositorio Interno de Releases</name>
-			<url>http://201.38.172.82:8888/repository/internal/</url>
+			<id>mavenunigex-bucket-release</id>
+			<url>gs://mavenunigex/release</url>
 		</repository>
 	</distributionManagement>
-	<!-- FIM CONFIGURACAO DE DEPLOY PARA REPOSITORIO REMOTO -->
 	
 	<properties>
 		<itext-versiona>5.5.12</itext-versiona>
 	</properties>
 	
 	<dependencies>
-	
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-xjc</artifactId>
 			<version>2.1.6</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>2.0.7</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.12</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itext-xtra</artifactId>
 			<version>5.5.12</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.itextpdf.tool</groupId>
 			<artifactId>xmlworker</artifactId>
 			<version>5.5.12</version>
 		</dependency>
-
 	</dependencies>
+
+	<build>
+		<extensions>
+			<extension>
+				<groupId>com.gkatzioura.maven.cloud</groupId>
+				<artifactId>google-storage-wagon</artifactId>
+				<version>1.0</version>
+			</extension>
+		</extensions>
+	</build>
+
 </project>
