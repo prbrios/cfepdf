@@ -61,11 +61,18 @@ public class CFEPDFGeradorHtml {
 	}
 	
 	private String extrato(CFe cfe) {
+
+		String modulo = "SAT";
+
+		if(cfe.getInfCFe().getIde().getcUF().equals("23")){
+			modulo = "MFE";
+		}
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("<tr>");
 		sb.append("<td colspan=\"2\" class=\"extrato 200pt sep\">");
 		sb.append("Extrato N&#176; " + cfe.getInfCFe().getIde().getnCFe() + "<br/>");
-		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - MFE");
+		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - " + modulo);
 		sb.append("</td>");
 		sb.append("</tr>");
 		return sb.toString();
@@ -455,11 +462,18 @@ public class CFEPDFGeradorHtml {
 	}
 
 	private Object extratoCanc(CFeCanc cfeCanc) {
+
+		String modulo = "SAT";
+
+		if(cfeCanc.getInfCFe().getIde().getcUF().equals("23")){
+			modulo = "MFE";
+		}
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("<tr>");
 		sb.append("<td colspan=\"2\" class=\"extrato 200pt sep\">");
 		sb.append("Extrato N&#176; " + cfeCanc.getInfCFe().getIde().getnCFe() + "<br/>");
-		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - MFE<br/>");
+		sb.append("CUPOM FISCAL ELETR&Ocirc;NICO - " + modulo + "<br/>");
 		sb.append("CANCELAMENTO");
 		sb.append("</td>");
 		sb.append("</tr>");

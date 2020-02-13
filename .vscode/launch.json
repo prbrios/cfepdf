@@ -1,0 +1,11 @@
+{
+	"configurations": [
+		{
+			"type": "java",
+			"name": "CodeLens (Launch) - CFEPDFTeste",
+			"request": "launch",
+			"mainClass": "prbrios.cfepdf.CFEPDFTeste",
+			"projectName": "cfepdf"
+		}
+	]
+}

@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Ide {
 
+	@XmlElement(name = "cUF")
+	private String cUF;
+
 	@XmlElement(name = "CNPJ")
 	private String cnpj;
 
@@ -33,6 +36,14 @@ public class Ide {
 	@XmlElement(name = "assinaturaQRCODE")
 	private String assinaturaQRCODE;
 
+	public String getcUF(){
+		return this.cUF;
+	}
+
+	public void setcUF(String cUF){
+		this.cUF = cUF;
+	}
+	
 	public String getCnpj() {
 		return cnpj;
 	}
